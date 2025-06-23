@@ -192,3 +192,11 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+datasets/
+data_processed/
+plots_alertness/
+models_alertness/
+features_alertness/
+audio_segments_base/
+audio_segments_final/
