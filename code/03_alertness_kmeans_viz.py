@@ -1,17 +1,18 @@
 # 03_alertness_kmeans_viz.py
-import pandas as pd
-import numpy as np
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
-from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.metrics import adjusted_rand_score, normalized_mutual_info_score, silhouette_score
-import sys
+from sklearn.preprocessing import StandardScaler
 
 try:
-    from config import FEATURES_DIR, PLOTS_DIR
+    from gen_sound.config import FEATURES_DIR, PLOTS_DIR
 except ImportError:
     print("Error: config.py not found.")
     sys.exit(1)

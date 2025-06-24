@@ -1,15 +1,15 @@
 # 01a_augment_data.py
-import numpy as np
-import librosa
-import soundfile as sf
-from tqdm import tqdm
-from pathlib import Path
 import shutil
 import sys
 from collections import Counter
 
+import librosa
+import numpy as np
+import soundfile as sf
+from tqdm import tqdm
+
 try:
-    from config import BASE_SEGMENTS_DIR, FINAL_AUDIO_DIR, SAMPLE_RATE
+    from gen_sound.config import BASE_SEGMENTS_DIR, FINAL_AUDIO_DIR, SAMPLE_RATE
 except ImportError:
     print("Error: config.py not found.")
     sys.exit(1)

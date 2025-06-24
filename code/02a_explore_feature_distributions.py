@@ -1,11 +1,12 @@
 # 02a_explore_feature_distributions.py
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import sys
 
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+
 try:
-    from config import FEATURES_DIR, PLOTS_DIR
+    from gen_sound.config import FEATURES_DIR, PLOTS_DIR
 except ImportError:
     print("Error: config.py not found.")
     sys.exit(1)
@@ -23,7 +24,7 @@ def main():
 
     # Define a small subset of features to plot for clarity
     features_to_plot = {
-        "MFCC_Delta": ['mfcc_mean_1', 'mfcc_mean_2', 'mfcc_mean_3', 'delta_mean_1'],
+        "MFCC_Delta": ['mfcc_mean_1', 'mfcc_mean_2', 'mfcc_mean_3', 'delta_mean_4'],
         "Log-Mel": ['mel_mean_10', 'mel_mean_20', 'mel_mean_30', 'mel_mean_40']
     }
 
@@ -50,8 +51,6 @@ def main():
         plt.savefig(plot_path)
         plt.close()
         print(f"Saved KDE plot to {plot_path}")
-
-
 
 if __name__ == "__main__":
     main()

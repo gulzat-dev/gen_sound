@@ -1,18 +1,20 @@
 # 04a_train_individual_alertness_models.py
-import pandas as pd
-import numpy as np
-import joblib
 import json
 import sys
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+# <-- MODIFIED: Added precision_score and recall_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import classification_report, accuracy_score, f1_score
 
 try:
-    from config import (FEATURES_DIR, MODELS_DIR, TEST_SIZE, RANDOM_STATE, CV_FOLDS)
+    from gen_sound.config import (FEATURES_DIR, MODELS_DIR, TEST_SIZE, RANDOM_STATE, CV_FOLDS)
     from utils import clean_and_recreate_dirs, log_and_save_df
 except ImportError:
     print("Error: config.py or utils.py not found.")
@@ -20,13 +22,15 @@ except ImportError:
 
 try:
     from xgboost import XGBClassifier
+
     XGB_AVAILABLE = True
 except ImportError:
     XGB_AVAILABLE = False
 
 
+# <-- MODIFIED: Function now also returns precision and recall
 def train_and_evaluate(X_train, y_train, X_test, y_test, model, param_grid, model_name):
-    """Tunes and evaluates a single model, returning its best parameters."""
+    """Tunes and evaluates a single model, returning its best parameters and detailed metrics."""
     print(f"\n--- Tuning {model_name} ---")
     cv_strategy = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
     grid_search = GridSearchCV(estimator=model, param_grid=param_grid, scoring='f1_weighted', cv=cv_strategy, n_jobs=1,
@@ -40,7 +44,14 @@ def train_and_evaluate(X_train, y_train, X_test, y_test, model, param_grid, mode
     test_accuracy = accuracy_score(y_test, y_pred)
     test_f1_weighted = f1_score(y_test, y_pred, average='weighted', zero_division=0)
 
-    return best_model, best_cv_score, test_accuracy, test_f1_weighted, best_params
+    # <-- ADDED: Calculate weighted precision and recall
+    # We use 'weighted' average for multi-class classification to account for class imbalance.
+    # 'zero_division=0' prevents warnings if a class has no predicted samples.
+    test_precision_weighted = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+    test_recall_weighted = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+
+    # <-- MODIFIED: Return the new metrics
+    return best_model, best_cv_score, test_accuracy, test_f1_weighted, test_precision_weighted, test_recall_weighted, best_params
 
 
 def main():
@@ -60,8 +71,9 @@ def main():
         "KNN": (KNeighborsClassifier(), {'n_neighbors': [3, 5, 7], 'weights': ['uniform', 'distance']})
     }
     if XGB_AVAILABLE:
-        models_to_train["XGBoost"] = (XGBClassifier(random_state=RANDOM_STATE, eval_metric='mlogloss', use_label_encoder=False, n_jobs=1 ),
-                                      {'n_estimators': [100, 200], 'max_depth': [3, 5]})
+        models_to_train["XGBoost"] = (
+        XGBClassifier(random_state=RANDOM_STATE, eval_metric='mlogloss', use_label_encoder=False, n_jobs=1),
+        {'n_estimators': [100, 200], 'max_depth': [3, 5]})
 
     all_results = []
     best_hyperparams = {}
@@ -89,12 +101,24 @@ def main():
         joblib.dump(le, MODELS_DIR / f"label_encoder_{feature_name.lower()}.joblib")
 
         for model_name, (model, param_grid) in models_to_train.items():
-            _, cv_f1, test_acc, test_f1, params = train_and_evaluate(X_train_scaled, y_train, X_test_scaled, y_test,
-                                                                     model, param_grid, model_name)
+            # <-- MODIFIED: Unpack the new precision and recall values
+            _, cv_f1, test_acc, test_f1, test_prec, test_recall, params = train_and_evaluate(
+                X_train_scaled, y_train, X_test_scaled, y_test,
+                model, param_grid, model_name
+            )
+
             best_hyperparams[feature_name][model_name] = params
-            all_results.append(
-                {'Feature Set': feature_name, 'Model': model_name, 'CV F1-W': cv_f1, 'Test Acc': test_acc,
-                 'Test F1-W': test_f1})
+
+            # <-- MODIFIED: Add the new metrics to the results dictionary
+            all_results.append({
+                'Feature Set': feature_name,
+                'Model': model_name,
+                'CV F1-W': cv_f1,
+                'Test Acc': test_acc,
+                'Test F1-W': test_f1,
+                'Test Precision-W': test_prec,  # <-- ADDED
+                'Test Recall-W': test_recall  # <-- ADDED
+            })
 
     params_path = MODELS_DIR / "best_hyperparameters.json"
     with open(params_path, 'w') as f:

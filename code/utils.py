@@ -1,15 +1,15 @@
 # utils.py
-import numpy as np
-import pandas as pd
+import shutil
+from datetime import datetime
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
-import shutil
-from pathlib import Path
-from datetime import datetime
 
 try:
-    from config import RESULTS_FILE
+    from gen_sound.config import RESULTS_FILE
 except ImportError:
     RESULTS_FILE = Path("project_summary_results.txt")
 

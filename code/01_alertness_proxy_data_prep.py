@@ -1,15 +1,15 @@
 # 01_alertness_proxy_data_prep.py
-import pandas as pd
-import librosa
-import soundfile as sf
-from tqdm import tqdm
-import numpy as np
+import shutil
 import sys
 from collections import Counter
-import shutil
+
+import librosa
+import pandas as pd
+import soundfile as sf
+from tqdm import tqdm
 
 try:
-    from config import (
+    from gen_sound.config import (
         DATA_RAW_DIR, BASE_SEGMENTS_DIR, SAMPLE_RATE, DURATION_S,
         ESC50_MAP, URBANSOUND8K_MAP
     )

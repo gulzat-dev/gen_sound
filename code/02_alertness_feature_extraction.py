@@ -1,13 +1,13 @@
 # 02_alertness_feature_extraction.py
+import sys
+
 import librosa
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-import sys
-from pathlib import Path
 
 try:
-    from config import (
+    from gen_sound.config import (
         FINAL_AUDIO_DIR, FEATURES_DIR, SAMPLE_RATE, N_FFT, HOP_LENGTH_FFT,
         N_MFCC, N_MELS
     )

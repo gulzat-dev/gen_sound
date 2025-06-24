@@ -1,21 +1,22 @@
 # 04c_train_cnn_pytorch_v2.py
-import pandas as pd
-import numpy as np
-import joblib
 import sys
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report
+
+import joblib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 from torch.utils.data import DataLoader, TensorDataset
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 # --- Import from the central config file ---
 try:
-    from config import (
+    from gen_sound.config import (
         FEATURES_DIR,
         MODELS_DIR,
         PLOTS_DIR,
@@ -43,7 +44,6 @@ except ImportError:
     def log_and_save_df(title, df, **kwargs):
         print(f"DUMMY: --- {title} ---")
         print(df.to_string())
-
 
 
 class AudioCNN(nn.Module):
@@ -230,8 +230,15 @@ def main():
     print(report_str)
 
     report_dict = classification_report(y_true, y_pred, target_names=class_names, output_dict=True, zero_division=0)
-    results_df = pd.DataFrame([{'Model': 'CNN (PyTorch)', 'Test Acc': report_dict['accuracy'],
-                                'Test F1-W': report_dict['weighted avg']['f1-score']}])
+
+    # <-- MODIFIED: Added precision and recall from the report dictionary
+    results_df = pd.DataFrame([{
+        'Model': 'CNN (PyTorch)',
+        'Test Acc': report_dict['accuracy'],
+        'Test F1-W': report_dict['weighted avg']['f1-score'],
+        'Test Precision-W': report_dict['weighted avg']['precision'],
+        'Test Recall-W': report_dict['weighted avg']['recall']
+    }])
 
     log_and_save_df("CNN (PyTorch) Model Performance", results_df, include_index=False)
 
