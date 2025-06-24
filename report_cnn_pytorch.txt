@@ -1,0 +1,18 @@
+--- CNN (PyTorch) Test Set Evaluation ---
+
+                           precision    recall  f1-score   support
+
+       proxy_alert_stress       0.93      0.92      0.93      1011
+    proxy_ambient_neutral       0.89      0.90      0.90       688
+proxy_distress_discomfort       0.93      0.98      0.96       240
+     proxy_joy_excitement       0.94      0.92      0.93       696
+
+                 accuracy                           0.92      2635
+                macro avg       0.92      0.93      0.93      2635
+             weighted avg       0.92      0.92      0.92      2635
+
+
+--- CNN (PyTorch) Model Performance ---
+
+        Model  Test Acc  Test F1-W  Test Precision-W  Test Recall-W
+CNN (PyTorch)  0.921442   0.921415          0.921584       0.921442
