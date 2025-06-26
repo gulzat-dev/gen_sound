@@ -1,11 +1,3 @@
-# Classifying Environmental Sounds by Acoustic Salience and Semantic Urgency
-
-This repository contains the code for the paper "Justifying and Classifying Environmental Sounds by Acoustic Salience and Semantic Urgency." The project introduces a novel alertness-based classification scheme for environmental sounds and compares the performance of classic machine learning models against an end-to-end Convolutional Neural Network (CNN).
-
-## Key Finding
-
-A Support Vector Machine (SVM) trained on engineered MFCC+Delta features achieved a test accuracy of **0.9294**, marginally outperforming a competitive CNN baseline (0.9214). This highlights the enduring value of principled feature engineering for semantically nuanced audio tasks.
-
 ## Setup and Installation
 
 ### 1. Prerequisites
