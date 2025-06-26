@@ -41,23 +41,113 @@ N_MELS = 128
 # (The paper mentions 40 MFCCs, which is a better choice than the old 20).
 N_MFCC = 40
 
-# --- Data Mapping ---
+# # --- Data Mapping ---
+# SOURCE_TO_PROXY_MAP = {
+#     "proxy_joy_excitement": {
+#         "esc50": ["laughing", "fireworks", "clapping", "cheering", "dog"],
+#         "urbansound8k": ["children_playing"]
+#     },
+#     "proxy_alert_stress": {
+#         "esc50": ["siren", "car_horn", "chainsaw", "helicopter", "engine", "clock_alarm", "glass_breaking", "hand_saw"],
+#         "urbansound8k": ["siren", "car_horn", "gun_shot", "jackhammer", "drilling", "dog_bark"]
+#     },
+#     "proxy_distress_discomfort": {
+#         "esc50": ["crying_baby", "sneezing", "coughing", "breathing", "snoring"],
+#         "urbansound8k": []
+#     },
+#     "proxy_ambient_neutral": {
+#         "esc50": ["wind", "rain", "sea_waves", "crickets", "chirping_birds", "footsteps", "clock_tick", "pouring_water", "washing_machine", "vacuum_cleaner", "rooster"],
+#         "urbansound8k": ["air_conditioner", "street_music", "engine_idling"]
+#     }
+# }
+
+# --- Comprehensive Data Mapping (All 60 Classes) ---
+# Each class from the ESC-50 and UrbanSound8K datasets is mapped to a semantic proxy class
+# based on its prototypical urgency and emotional valence.
+
 SOURCE_TO_PROXY_MAP = {
-    "proxy_joy_excitement": {
-        "esc50": ["laughing", "fireworks", "clapping", "cheering", "dog"],
-        "urbansound8k": ["children_playing"]
-    },
     "proxy_alert_stress": {
-        "esc50": ["siren", "car_horn", "chainsaw", "helicopter", "engine", "clock_alarm", "glass_breaking", "hand_saw"],
-        "urbansound8k": ["siren", "car_horn", "gun_shot", "jackhammer", "drilling", "dog_bark"]
+        "esc50": [
+            "siren",
+            "car_horn",
+            "chainsaw",
+            "helicopter",
+            "engine",
+            "train",
+            "glass_breaking",
+            "thunderstorm"
+        ],
+        "urbansound8k": [
+            "siren",
+            "car_horn",
+            "gun_shot",
+            "jackhammer",
+            "drilling",
+            "dog_bark"
+        ]
+    },
+    "proxy_joy_excitement": {
+        "esc50": [
+            "laughing",
+            "fireworks",
+            "clapping",
+            "cheering",
+            "dog",
+            "church_bells"
+        ],
+        "urbansound8k": [
+            "children_playing"
+        ]
     },
     "proxy_distress_discomfort": {
-        "esc50": ["crying_baby", "sneezing", "coughing", "breathing", "snoring"],
+        "esc50": [
+            "crying_baby",
+            "sneezing",
+            "coughing",
+            "breathing",
+            "snoring",
+            "hand_saw",
+            "door_wood_creaks",
+            "door_wood_knock",
+            "pig",
+            "cow",
+            "hen",
+            "cat",
+            "sheep"
+        ],
         "urbansound8k": []
     },
     "proxy_ambient_neutral": {
-        "esc50": ["wind", "rain", "sea_waves", "crickets", "chirping_birds", "footsteps", "clock_tick", "pouring_water", "washing_machine", "vacuum_cleaner", "rooster"],
-        "urbansound8k": ["air_conditioner", "street_music", "engine_idling"]
+        "esc50": [
+            "wind",
+            "rain",
+            "sea_waves",
+            "crickets",
+            "chirping_birds",
+            "rooster",
+            "footsteps",
+            "clock_tick",
+            "pouring_water",
+            "washing_machine",
+            "vacuum_cleaner",
+            "can_opening",
+            "toilet_flush",
+            "brushing_teeth",
+            "drinking_sipping",
+            "keyboard_typing",
+            "mouse_click",
+            "crackling_fire",
+            "water_drops",
+            "frog",
+            "insects",
+            "crow",
+            "airplane"
+        ],
+        "urbansound8k": [
+            "air_conditioner",
+            "street_music",
+            "engine_idling"
+        ]
     }
 }
 
