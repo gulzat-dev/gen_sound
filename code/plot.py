@@ -58,10 +58,10 @@ def main():
 
     features_to_showcase = {
         "MFCC_Delta": [
-            'mfcc_mean_1',
-            'mfcc_mean_2',
-            'mfcc_mean_3',
-            'delta_mean_4'
+            'mfcc_mean_1',  # Basic Energy
+            'mfcc_std_2',  # Basic Dynamics (Variation)
+            'mfcc_mean_3',  # Perceptual Texture
+            'delta_mean_4'  # Advanced Dynamics (Rate of Change)
         ],
         "Log-Mel": [
             'mel_mean_2',
